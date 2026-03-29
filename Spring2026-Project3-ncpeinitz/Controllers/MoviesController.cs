@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Spring2026_Project3_ncpeinitz.Data;
 using Spring2026_Project3_ncpeinitz.Models;
 using Spring2026_Project3_ncpeinitz.ViewModels;
+using Spring2026_Project3_ncpeinitz.Services;
 
 namespace Spring2026_Project3_ncpeinitz.Controllers
 {
@@ -52,15 +53,15 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
 
             var reviews = await _aiTextService.GenerateMovieReviewsAsync(movie, actorNames);
 
-            double average = AiTextService.AverageCompound(reviews);
+            double average = AiTextService.AverageScore(reviews);
 
             var view = new MovieDetails
             {
                 Movie = movie,
                 Actors = actorNames,
                 Reviews = reviews,
-                AverageCompound = average,
-                OverallLabel = AiTextService.ToLabel(average)
+                AverageScore = average,
+                GeneralLabel = AiTextService.ToLabel(average)
             };
 
             return View(view);

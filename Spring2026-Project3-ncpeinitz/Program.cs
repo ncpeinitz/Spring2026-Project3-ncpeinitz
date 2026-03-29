@@ -23,7 +23,7 @@ builder.Services.AddScoped(pro =>
     IConfiguration config = pro.GetRequiredService<IConfiguration>();
     string key = config["AzureOpenAI:Key"] ?? throw new InvalidOperationException("Missing AzureOpenAI: Key");
     string endpoint = config["AzureOpenAI:Endpoint"] ?? throw new InvalidOperationException("Missing AzureOpenAI: Endpoint");
-    return new OpenAIClient(new Uri(endpoint), new AzureKeyCredential(key));
+    return new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(key));
 });
 
 builder.Services.AddScoped<AiTextService>();

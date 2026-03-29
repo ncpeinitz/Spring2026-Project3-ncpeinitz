@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Spring2026_Project3_ncpeinitz.Services;
 
 namespace Spring2026_Project3_ncpeinitz.Controllers
 {
@@ -50,17 +51,17 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
                 .Select(act_mov => act_mov.Movie!.Title)
                 .ToList();
 
-            var tweets = await _aiTextService.GenerateMovieReviewsAsync(actor, movieTitles);
+            var tweets = await _aiTextService.GenerateActorTweetsAsync(actor, movieTitles);
 
-            double average = AiTextService.AverageCompound(tweets);
+            double average = AiTextService.AverageScore(tweets);
 
             var view = new ActorDetails
             {
                 Actor = actor,
                 Movies = movieTitles,
                 Tweets = tweets,
-                AverageCompound = average,
-                OverallLabel = AiTextService.ToLabel(average)
+                AverageScore = average,
+                GeneralLabel = AiTextService.ToLabel(average)
             };
 
             return View(view);
@@ -79,8 +80,8 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Age,Gender,IMDbUrl")] Actor actor, IFormFile? photoFile)
         {
-            if (photoFile != null $$ photoFile.Length > 0)
-                {
+            if (photoFile != null && photoFile.Length > 0)
+            {
                 using var memory_stream = new MemoryStream();
                 await photoFile.CopyToAsync(memory_stream);
                 actor.Photo = memory_stream.ToArray();
