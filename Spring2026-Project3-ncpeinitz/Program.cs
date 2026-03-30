@@ -1,15 +1,25 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Spring2026_Project3_ncpeinitz.Data;
 using Azure;
 using Azure.AI.OpenAI;
-using Spring2026_Project3_ncpeinitz.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using OpenAI;
+using Spring2026_Project3_ncpeinitz.Data;
+using Spring2026_Project3_ncpeinitz.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+string configConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+var conStrBuilder = new SqlConnectionStringBuilder(configConnectionString)
+{
+    Password = builder.Configuration["Db:Password"]
+        ?? throw new InvalidOperationException("Db:Password not found in configuration.")
+};
+
+string connectionString = conStrBuilder.ConnectionString;
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
