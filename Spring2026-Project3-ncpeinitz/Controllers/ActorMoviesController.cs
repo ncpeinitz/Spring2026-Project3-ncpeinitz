@@ -22,7 +22,7 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
         // GET: ActorMovies
         public async Task<IActionResult> Index()
         {
-            var actorMovies = _context.ActorMovie.Include(a => a.Actor).Include(a => a.Movie);
+            var actorMovies = _context.ActorMovie.Include(actor_movie => actor_movie.Actor).Include(actor_movie => actor_movie.Movie);
             return View(await actorMovies.ToListAsync());
         }
 
@@ -49,8 +49,8 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
         // GET: ActorMovies/Create
         public IActionResult Create()
         {
-            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Gender");
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Genre");
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name");
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title");
             return View();
         }
 
@@ -61,8 +61,11 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ActorId,MovieId")] ActorMovie actorMovie)
         {
+            ModelState.Remove("Actor");
+            ModelState.Remove("Movie");
+            
             bool exists = await _context.ActorMovie.AnyAsync(i => i.ActorId == actorMovie.ActorId && i.MovieId == actorMovie.MovieId);
-            if (!exists) {
+            if (exists) {
                 ModelState.AddModelError("", "This actor is already linked to that movie.");
                     }
 
@@ -90,8 +93,8 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
             {
                 return NotFound();
             }
-            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Gender", actorMovie.ActorId);
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Genre", actorMovie.MovieId);
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name", actorMovie.ActorId);
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title", actorMovie.MovieId);
             return View(actorMovie);
         }
 
@@ -106,6 +109,9 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("Actor");
+            ModelState.Remove("Movie");
 
             if (ModelState.IsValid)
             {
@@ -127,8 +133,8 @@ namespace Spring2026_Project3_ncpeinitz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Gender", actorMovie.ActorId);
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Genre", actorMovie.MovieId);
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name", actorMovie.ActorId);
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title", actorMovie.MovieId);
             return View(actorMovie);
         }
 

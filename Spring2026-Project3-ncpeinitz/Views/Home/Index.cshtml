@@ -5,6 +5,30 @@
 <div class="home-hero text-center p-5 mb-4">
     <h1 class="display-4"> Movie & Actor Database</h1>
     <p class="lead">Browse movies and actors as well as read AI-generated reviews and tweets with sentiment analysis.</p>
-    <a asp-controller="Movies" asp-action="Index" class="btn btn-light btn-lg me-2">Browse Movies</a>
-    <a asp-controller="Actors" asp-action="Index" class="btn btn-outline-light btn-lg">Browse Actors</a>
+    <a asp-controller="Movies" asp-action="Index" class="btn btn-light btn-lg me-3">Browse Movies</a>
+    <a asp-controller="Actors" asp-action="Index" class="btn btn-outline-light">Browse Actors</a>
+</div>
+
+<div class="row text-center mt-4">
+    <div class="col-md mb-3">
+        <div class="card-panel">
+            <h3>Movies</h3>
+            <p>View, add, and manage movies with posters, genres, and IMDb links.</p>
+            <a asp-controller="Movies" asp-action="Index" class="btn btn-primary">Go to Movies</a>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card-panel">
+            <h3>Actors</h3>
+            <p>Explore actors, their filmographies, and AI-generated Twitter commentary.</p>
+            <a asp-controller="Actors" asp-action="Index" class="btn btn-primary">Go to Actors</a>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card-panel">-
+            <h3>Connections</h3>
+            <p>Link actors to movies and manage their relationships.</p>
+            <a asp-controller="ActorMovies" asp-action="Index" class="btn btn-primary">Go to Connections</a>
+        </div>
+    </div>
 </div>
